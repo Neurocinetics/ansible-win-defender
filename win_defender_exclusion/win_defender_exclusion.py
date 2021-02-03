@@ -4,18 +4,21 @@
 # (c) 2017, David Baumann <dabondi@noreply.users.github.com>
 # GNU GENERAL PUBLIC LICENSE v3
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: win_defender_exclusion
+
 version_added: "2.5"
+
 short_description: Manage Windows Defender Realtime Exclusion Lists
+
 description: |
      Manage Windows Defender Realtime Scanning Exclusion Lists
 
      Tested on Windows Server 2016
      **Will only work on Windows 10 or Windows Server 2016 Systems because of Usage of the Get/Set-MpPreference Powershell Command**
+
 options:
-  
   list:
     default: []
     required: false
@@ -27,10 +30,7 @@ options:
     required: true
     description:
       - What type of exclusion to manage
-    choices:
-     - "Process"
-     - "Extension"
-     - "Path"
+    choices: [ Process, Extension, Path ]
 
   clean:
     default: false
@@ -38,7 +38,8 @@ options:
      - If true all other non defined exclusions getting removed
     required: false
 
-author: David Baumann <dabondi@noreply.users.github.com>
+author: 
+  - David Baumann <dabondi@noreply.users.github.com>
 '''
 
 EXAMPLES = '''
@@ -49,3 +50,10 @@ EXAMPLES = '''
       list:
         - "ComplianceAuditService.exe"
 '''
+
+RETURN = r'''
+
+'''
+
+class VarsModule(BaseVarsPlugin):
+        REQUIRES_WHITELIST = True

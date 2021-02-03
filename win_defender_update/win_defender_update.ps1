@@ -5,10 +5,20 @@
 # WANT_JSON
 # POWERSHELL_COMMON
 
-#Temporary fix
-Set-StrictMode -Off
+#AnsibleRequires -CSharpUtil Ansible.Basic
 
-########################################################################################################################
+$spec = @{
+    options = @{
+        update = @{ type = "bool"; default = $true }
+    }
+    required_one_of = @(,@("update"))
+    supports_check_mode = $false
+}
+
+$module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
+
+Set-StrictMode -Version 2;
+$ErrorActionPreference = "Stop";
 
 $params = Parse-Args $args -supports_check_mode $true
 $result = New-Object psobject;
@@ -18,7 +28,6 @@ Set-Attr $result "changed" $false;
 $CheckMode = $False
 
 $Attributes = $params.GetEnumerator() | where {$_.key -notlike "_ansible_*"}
-
 
 $Attrib = @{} # Holder of Properties the Script work from
 $ProcessedPropertys= @{}    # Holder of Information about the Process
@@ -60,5 +69,4 @@ if($preStatus.AMProductVersion -ne $postStatus.AMProductVersion){
   Set-Attr $result "AMProductVersion" $true
   Set-Attr $result "changed" $true;
 }
-
-Exit-Json -obj $result
+$module.ExitJson()

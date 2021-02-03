@@ -5,6 +5,25 @@
 # WANT_JSON
 # POWERSHELL_COMMON
 
+#AnsibleRequires -CSharpUtil Ansible.Basic
+
+$spec = @{
+    options = @{
+        clean = @{ type = "bool"; default = $false }
+        type = @{ type = "str"; choices = "Process", "Extension", "Path"; required = $true }
+        list = @{ type = "list" }
+    }
+    mutually_exclusive = @(
+        ,@("variables", "clean")
+        ,@("variables", "type")
+        ,@("variables", "list")
+    )
+    required_one_of = @(,@("type", "false"))
+    supports_check_mode = $true
+}
+
+$module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
+
 Set-StrictMode -Version 2;
 $ErrorActionPreference = "Stop";
 
@@ -107,4 +126,4 @@ $result = @{
   list=$list
 }
 
-Exit-Json $result;
+$module.ExitJson()
